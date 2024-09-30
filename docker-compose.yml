@@ -1,0 +1,9 @@
+services:
+  back:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/back
+    restart: always
