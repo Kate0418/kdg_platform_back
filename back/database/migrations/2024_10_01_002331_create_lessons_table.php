@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subject_id')->constrained();
-            $table->foreignId('course_id')->constrained();
+            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('course_id');
             $table->time('start_time');
             $table->integer('day_of_week')->unsigned();
             $table->timestamps();
