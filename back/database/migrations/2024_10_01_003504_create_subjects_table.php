@@ -12,6 +12,7 @@ class CreateSubjectsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
+            $table->unsignedBigInteger('company_id');
             $table->timestamps();
         });
     }

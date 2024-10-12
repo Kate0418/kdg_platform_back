@@ -13,13 +13,14 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->string('first_password');
+            $table->string('ip_address')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['type', 'course_id', 'company_id', 'first_password']);
+            $table->dropColumn(['type', 'course_id', 'company_id', 'first_password','ip_address']);
         });
     }
 };

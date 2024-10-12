@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
+
     protected $fillable = [
         'name',
         'password',
@@ -15,7 +19,8 @@ class User extends Authenticatable
         'course_id',
         'company_id', 
         'email',
-        'first_password'
+        'first_password',
+        'ip_address'
     ];
 
     protected $hidden = [
@@ -27,6 +32,11 @@ class User extends Authenticatable
         'type' => 'integer',
         'course_id' => 'integer',
         'company_id' => 'integer',
+    ];
+
+    protected $attributes = [
+        'course_id' => null,
+        'ip_address' => null,
     ];
 
     public function attend(): HasMany
