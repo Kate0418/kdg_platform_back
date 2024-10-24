@@ -10,11 +10,16 @@ class CourseController extends Controller
     public function select() {
         $user = Auth::user();
         $courses = Course::where('company_id', $user->company_id)
-            ->select('id', 'name')
             ->get()
             ->map(function ($course) {
-                return ['id' => $course->id, 'name' => $course->name];
+                return [
+                    'value' => $course->id,
+                    'label' => $course->name
+                ];
             });
-        return response()->json(['courses' => $courses]);
+        return response()->json([
+            'success' => true,
+            'courses' => $courses
+        ]);
     }
 }
