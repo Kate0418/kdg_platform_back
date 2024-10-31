@@ -13,7 +13,47 @@ use Illuminate\Support\Facades\Log;
 
 class TeacherController extends Controller
 {
-    public function add(Request $request) {
+    public function index(Request $request) {
+        $user = Auth::user();
+
+        $teachers = User::where("company_id", $user->company_id)
+            ->where('type', 2)
+            ->with('subject');
+
+        $key_word = $request->keyWord;
+        if ($key_word) {
+            $teachers->where(function ($query) use ($key_word) {
+                $query->where('name', 'like', "%{$key_word}%")
+                    ->orWhere('email', 'like', "%{$key_word}%")
+                    ->orWhereHas('subject', function ($subQuery) use ($key_word) {
+                        $subQuery->where('name', 'like', "%{$key_word}%");
+                    });
+            });
+        }
+
+        $page_count = $request->pageCount;
+        $teachers = $teachers->paginate(14, ['*'], 'page', $page_count);
+        $total = $teachers->lastPage();
+
+        return response()->json([
+            'success' => true,
+            "teachers" => $teachers->map(function($query) {
+                return [
+                    "id" => $query->id,
+                    "name" => $query->name,
+                    "email" => $query->email,
+                    "subjectNames" => $query->subject
+                        ? $query->subject->map(function($subQuery) {
+                            return $subQuery->name;
+                        })->toArray()
+                        : [],
+                ];
+            }),
+            'total' => $total,
+        ], 201);
+    }
+
+    public function store(Request $request) {
         $user = Auth::user();
 
         $request->validate([

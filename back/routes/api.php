@@ -18,15 +18,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('subject')->group(function () {
-        Route::post('/get', [SubjectController::class, 'get']);
-        Route::post('/add', [SubjectController::class, 'add']);
-        Route::post('/select', [SubjectController::class, 'select']);
+        Route::apiResource('/', SubjectController::class);
+        Route::get('/select', [SubjectController::class, 'select']);
     });
 
     Route::post('/course/select', [CourseController::class, 'select']);
 
     Route::prefix('teacher')->group(function () {
-        Route::post('/add', [TeacherController::class, 'add']);
+        Route::apiResource('/', TeacherController::class);
         Route::get('/select', [TeacherController::class, 'select']);
     });
 });

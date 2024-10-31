@@ -11,33 +11,40 @@ use Illuminate\Support\Facades\Log;
 
 class SubjectController extends Controller
 {
-    public function get(Request $request) {
+    public function index(Request $request) {
         $user = Auth::user();
 
         $subjects = Subject::where("company_id", $user->company_id)
-            ->with("user")
-            ->get()
-            ->map(function ($query) {
+            ->with("user");
+
+        $key_word = $request->keyWord;
+        if ($key_word) {
+            $subjects->where(function ($query) use ($key_word) {
+                $query->where('name', 'like', "%{$key_word}%")
+                  ->orWhereHas('user', function ($subQuery) use ($key_word) {
+                      $subQuery->where('name', 'like', "%{$key_word}%");
+                  });
+            });
+        }
+
+        $page_count = $request->pageCount;
+        $subjects = $subjects->paginate(14, ['*'], 'page', $page_count);
+        $total = $subjects->lastPage();
+
+        return response()->json([
+            'success' => true,
+            "subjects" => $subjects->map(function($query) {
                 return [
                     "id" => $query->id,
                     "name" => $query->name,
                     "teacher_name" => $query->user ? $query->user->name : "",
                 ];
-            });
-
-        $key_word = $request->keyWord;
-        if ($key_word) {
-            $subjects = $subjects->filter(function ($query) use ($key_word) {
-                return stripos($query['name'], $key_word) !== false || stripos($query['teacher_name'], $key_word) !== false;
-            });
-        }
-
-        return response()->json([
-            'success' => true,
-            "subjects" => $subjects->values()->toArray()
+            }),
+            'total' => $total,
         ], 201);
     }
-    public function add (Request $request) {
+
+    public function store(Request $request) {
         $user = Auth::user();
 
         $request->validate([
@@ -75,7 +82,7 @@ class SubjectController extends Controller
         ], 201);
     }
 
-    public function select () {
+    public function select() {
         $user = Auth::user();
 
         $subjects = Subject::where("company_id", $user->company_id)
@@ -84,7 +91,7 @@ class SubjectController extends Controller
             ->map(function ($query) {
                 return [
                     "value" => $query->id,
-                    "label" => $query->name,
+                    "label" => $query->name . ": " . ($query->user ? $query->user->name  : "講師なし"),
                 ];
             });
 
