@@ -24,8 +24,8 @@ return new class extends Migration {
             ["name" => "3年次"],
             ["name" => "4年次"],
             ["name" => "5年次"],
-            ["name" => "入学前"],
             ["name" => "卒業後"],
+            ["name" => "入学前"],
         ]);
     }
 
