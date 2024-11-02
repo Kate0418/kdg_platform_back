@@ -6,19 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAttendsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::create('attends', function (Blueprint $table) {
+        Schema::create("attends", function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('lesson_id');
-            $table->integer('status');
+            $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("lesson_id");
+            $table->integer("status");
+            $table->unsignedBigInteger("company_id");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('attends');
+        Schema::dropIfExists("attends");
     }
 }

@@ -13,30 +13,30 @@ class User extends Authenticatable
     use HasApiTokens;
 
     protected $fillable = [
-        'name',
-        'password',
-        'type',
-        'course_id',
-        'company_id', 
-        'email',
-        'first_password',
-        'ip_address'
+        "name",
+        "password",
+        "type",
+        "course_id",
+        "company_id",
+        "email",
+        "first_password",
+        "ip_address",
+        "grade_id",
     ];
 
-    protected $hidden = [
-        'password',
-        'first_password',
-    ];
+    protected $hidden = ["password", "first_password"];
 
     protected $casts = [
-        'type' => 'integer',
-        'course_id' => 'integer',
-        'company_id' => 'integer',
+        "type" => "integer",
+        "course_id" => "integer",
+        "company_id" => "integer",
+        "grade_id" => "integer",
     ];
 
     protected $attributes = [
-        'course_id' => null,
-        'ip_address' => null,
+        "course_id" => null,
+        "ip_address" => null,
+        "grade_id" => null,
     ];
 
     public function attend(): HasMany

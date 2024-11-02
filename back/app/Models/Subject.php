@@ -11,7 +11,7 @@ class Subject extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'company_id'];
+    protected $fillable = ["user_id", "name", "company_id"];
 
     public function user(): BelongsTo
     {

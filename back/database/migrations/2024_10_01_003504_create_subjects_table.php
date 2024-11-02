@@ -6,19 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSubjectsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create("subjects", function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('name');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger("user_id")->nullable();
+            $table->string("name");
+            $table->unsignedBigInteger("company_id");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists("subjects");
     }
 }

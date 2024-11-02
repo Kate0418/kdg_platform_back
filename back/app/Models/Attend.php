@@ -10,12 +10,13 @@ class Attend extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'lesson_id', 'status'];
+    protected $fillable = ["user_id", "lesson_id", "status", "company_id"];
 
     protected $casts = [
-        'user_id' => 'integer',
-        'lesson_id' => 'integer',
-        'status' => 'integer',
+        "user_id" => "integer",
+        "lesson_id" => "integer",
+        "status" => "integer",
+        "company_id" => "integer",
     ];
 
     public function user(): BelongsTo
@@ -26,5 +27,10 @@ class Attend extends Model
     public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 }
