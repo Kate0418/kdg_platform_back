@@ -58,8 +58,7 @@ class SubjectController extends Controller
 
         $request->validate([
             "subjects.*.name" => "required|string|max:255",
-            "subjects.*.teacherId.value" => "integer",
-            "subjects.*.teacherId.label" => "string|max:255",
+            "subjects.*.teacherId" => "integer",
         ]);
 
         $subjects = $request->subjects;
@@ -72,7 +71,7 @@ class SubjectController extends Controller
                         "name" => $subject["name"],
                         "user_id" =>
                             $subject["teacherId"] !== null
-                                ? $subject["teacherId"]["value"]
+                                ? $subject["teacherId"]
                                 : null,
                         "company_id" => $company_id,
                     ]);

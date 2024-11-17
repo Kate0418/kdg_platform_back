@@ -22,8 +22,14 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function grade(): BelongsTo
+    {
+        return $this->belongsTo(Grade::class);
     }
 }

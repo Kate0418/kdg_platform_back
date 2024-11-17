@@ -13,6 +13,44 @@ use Exception;
 
 class CourseController extends Controller
 {
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+
+        $courses = Course::where("company_id", $user->company_id)->with(
+            "grade"
+        );
+
+        $key_word = $request->keyWord;
+        if ($key_word) {
+            $courses->where(function ($query) use ($key_word) {
+                $query
+                    ->where("name", "like", "%{$key_word}%")
+                    ->orWhereHas("grade", function ($subQuery) use ($key_word) {
+                        $subQuery->where("name", "like", "%{$key_word}%");
+                    });
+            });
+        }
+
+        $page_count = $request->pageCount;
+        $courses = $courses->paginate(14, ["*"], "page", $page_count);
+        $total = $courses->lastPage();
+
+        return response()->json(
+            [
+                "success" => true,
+                "courses" => $courses->map(function ($query) {
+                    return [
+                        "id" => $query->id,
+                        "name" => $query->name,
+                        "gradeName" => $query->grade->name,
+                    ];
+                }),
+                "total" => $total,
+            ],
+            201
+        );
+    }
     public function store(Request $request)
     {
         $user = Auth::user();
