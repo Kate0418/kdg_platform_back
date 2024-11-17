@@ -23,7 +23,10 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/select", [SubjectController::class, "select"]);
     });
 
-    Route::post("/course/select", [CourseController::class, "select"]);
+    Route::prefix("course")->group(function () {
+        Route::apiResource("/", CourseController::class);
+        Route::get("/select", [CourseController::class, "select"]);
+    });
 
     Route::prefix("teacher")->group(function () {
         Route::apiResource("/", TeacherController::class);

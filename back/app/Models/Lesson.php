@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Lesson extends Model
 {
     protected $fillable = [
+        "company_id",
         "subject_id",
         "course_id",
-        "start_time",
+        "period",
         "day_of_week",
     ];
 
@@ -28,5 +29,10 @@ class Lesson extends Model
     public function attend(): HasMany
     {
         return $this->hasMany(Attend::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 }

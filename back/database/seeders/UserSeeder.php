@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             "company_id" => 1,
             "email" => "nakao.keito0418@gmail.com",
             "first_password" => "Tanimiti4221",
-            "ip_address" => null,
+            "grade_id" => 2,
         ]);
     }
 }

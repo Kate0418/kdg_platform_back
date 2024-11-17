@@ -35,7 +35,6 @@ class User extends Authenticatable
 
     protected $attributes = [
         "course_id" => null,
-        "ip_address" => null,
         "grade_id" => null,
     ];
 

@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->unsignedBigInteger("course_id")->nullable();
             $table->unsignedBigInteger("company_id");
             $table->string("first_password");
-            $table->string("ip_address")->nullable();
             $table->string("grade_id")->nullable();
             $table->softDeletes();
         });
@@ -26,7 +25,6 @@ return new class extends Migration {
                 "course_id",
                 "company_id",
                 "first_password",
-                "ip_address",
                 "grade_id",
             ]);
             $table->dropSoftDeletes();
