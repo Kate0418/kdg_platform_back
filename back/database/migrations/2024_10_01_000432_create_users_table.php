@@ -9,10 +9,8 @@ return new class extends Migration {
     {
         Schema::table("users", function (Blueprint $table) {
             $table->tinyInteger("type");
-            $table->unsignedBigInteger("course_id")->nullable();
             $table->unsignedBigInteger("company_id");
             $table->string("first_password");
-            $table->string("grade_id")->nullable();
             $table->softDeletes();
         });
     }
@@ -20,13 +18,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->dropColumn([
-                "type",
-                "course_id",
-                "company_id",
-                "first_password",
-                "grade_id",
-            ]);
+            $table->dropColumn(["type", "company_id", "first_password"]);
             $table->dropSoftDeletes();
         });
     }

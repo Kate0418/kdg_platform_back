@@ -32,4 +32,9 @@ class Course extends Model
     {
         return $this->belongsTo(Grade::class);
     }
+
+    public function time(): HasMany
+    {
+        return $this->hasMany(Time::class);
+    }
 }

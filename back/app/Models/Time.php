@@ -11,8 +11,8 @@ class Time extends Model
 
     protected $fillable = ["course_id", "period", "start_time", "end_time"];
 
-    public function subject(): BelongsTo
+    public function course(): BelongsTo
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Course::class);
     }
 }

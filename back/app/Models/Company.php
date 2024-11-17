@@ -31,4 +31,9 @@ class Company extends Model
     {
         return $this->hasMany(Course::class);
     }
+
+    public function lesson(): HasMany
+    {
+        return $this->hasMany(Lesson::class);
+    }
 }
