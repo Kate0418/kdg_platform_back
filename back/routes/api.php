@@ -5,7 +5,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\GradeController;
+use App\Models\Grade;
+use App\Models\Year;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware("auth:sanctum")->group(function () {
@@ -14,7 +15,7 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 
     Route::prefix("student")->group(function () {
-        Route::post("/get_users", [StudentController::class, "get_users"]);
+        Route::apiResource("/", StudentController::class);
         Route::post("/add", [StudentController::class, "add"]);
     });
 
@@ -33,7 +34,31 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/select", [TeacherController::class, "select"]);
     });
 
-    Route::get("/grade/select", [GradeController::class, "select"]);
+    Route::get("/grade/select", function () {
+        $grades = Grade::get()->map(function ($query) {
+            return [
+                "value" => $query->id,
+                "label" => $query->name,
+            ];
+        });
+        return response()->json([
+            "success" => true,
+            "grades" => $grades,
+        ]);
+    });
+
+    Route::get("/year/select", function () {
+        $years = Year::get()->map(function ($query) {
+            return [
+                "value" => $query->id,
+                "label" => $query->name,
+            ];
+        });
+        return response()->json([
+            "success" => true,
+            "years" => $years,
+        ]);
+    });
 });
 
 Route::post("/login", [LoginController::class, "index"]);
