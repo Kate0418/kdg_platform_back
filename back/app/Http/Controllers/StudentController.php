@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendMailJob;
+use App\Mail\LoginMail;
 use App\Models\User;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -124,21 +126,29 @@ class StudentController extends Controller
             DB::transaction(function () use ($students, $company_id) {
                 foreach ($students as $student) {
                     $first_password = Str::random(12);
-                    $user_id = User::create([
+                    $new_user = User::create([
                         "name" => $student["name"],
                         "password" => bcrypt($first_password),
                         "type" => 3,
                         "company_id" => $company_id,
                         "email" => $student["email"],
                         "first_password" => $first_password,
-                    ])->id;
+                    ]);
 
                     Student::create([
-                        "user_id" => $user_id,
+                        "user_id" => $new_user->id,
                         "course_id" => $student["courseId"],
                         "grade_id" => $student["gradeId"],
                         "year_id" => $student["yearId"],
                     ]);
+
+                    foreach ($students as $student) {
+                        $new_user = User::where(
+                            "email",
+                            $student["email"]
+                        )->first();
+                        SendMailJob::dispatch($new_user, LoginMail::class);
+                    }
                 }
             });
         } catch (Exception $e) {
