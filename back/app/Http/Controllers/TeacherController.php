@@ -36,6 +36,7 @@ class TeacherController extends Controller
         }
 
         $page_count = $request->pageCount;
+        $teacher_ids = $teachers->pluck("id")->toArray();
         $teachers = $teachers->paginate(14, ["*"], "page", $page_count);
         $total = $teachers->lastPage();
 
@@ -56,6 +57,7 @@ class TeacherController extends Controller
                             : [],
                     ];
                 }),
+                "teacherIds" => $teacher_ids,
                 "total" => $total,
             ],
             201
@@ -65,7 +67,6 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
         $request->validate([
             "teachers.*.name" => "required|string|max:255",
             "teachers.*.email" => "required|email|unique:users,email",
