@@ -31,6 +31,7 @@ class SubjectController extends Controller
         }
 
         $page_count = $request->pageCount;
+        $student_ids = $subjects->pluck("id")->toArray();
         $subjects = $subjects->paginate(14, ["*"], "page", $page_count);
         $total = $subjects->lastPage();
 
@@ -46,6 +47,7 @@ class SubjectController extends Controller
                             : "",
                     ];
                 }),
+                "subjectIds" => $student_ids,
                 "total" => $total,
             ],
             201
@@ -58,7 +60,7 @@ class SubjectController extends Controller
 
         $request->validate([
             "subjects.*.name" => "required|string|max:255",
-            "subjects.*.teacherId" => "integer",
+            "subjects.*.teacherId" => "integer|nullable",
         ]);
 
         $subjects = $request->subjects;
