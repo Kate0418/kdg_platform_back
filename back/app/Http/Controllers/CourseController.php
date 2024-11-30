@@ -34,6 +34,7 @@ class CourseController extends Controller
         }
 
         $page_count = $request->pageCount;
+        $course_ids = $courses->pluck("id")->toArray();
         $courses = $courses->paginate(14, ["*"], "page", $page_count);
         $total = $courses->lastPage();
 
@@ -47,6 +48,7 @@ class CourseController extends Controller
                         "gradeName" => $query->grade->name,
                     ];
                 }),
+                "courseIds" => $course_ids,
                 "total" => $total,
             ],
             201
