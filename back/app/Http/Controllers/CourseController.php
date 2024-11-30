@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Carbon\Carbon;
 
 class CourseController extends Controller
 {
@@ -70,14 +71,14 @@ class CourseController extends Controller
         $company_id = $user->company_id;
         $course = $request->course;
 
-        $course_id = Course::create([
-            "name" => $course["name"],
-            "grade_id" => $course["gradeId"],
-            "company_id" => $company_id,
-        ])->id;
-
         try {
-            DB::transaction(function () use ($course_id, $course, $company_id) {
+            DB::transaction(function () use ($course, $company_id) {
+                $course_id = Course::create([
+                    "name" => $course["name"],
+                    "grade_id" => $course["gradeId"],
+                    "company_id" => $company_id,
+                ])->id;
+
                 foreach ($course["lessons"] as $lesson) {
                     Lesson::create([
                         "course_id" => $course_id,
@@ -92,8 +93,12 @@ class CourseController extends Controller
                     Time::create([
                         "course_id" => $course_id,
                         "period" => $time["period"],
-                        "start_time" => $time["startTime"],
-                        "end_time" => $time["endTime"],
+                        "start_time" => Carbon::parse(
+                            $time["startTime"]
+                        )->format("H:i:s"),
+                        "end_time" => Carbon::parse($time["endTime"])->format(
+                            "H:i:s"
+                        ),
                     ]);
                 }
             });
