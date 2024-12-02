@@ -42,9 +42,12 @@ class SubjectController extends Controller
                     return [
                         "id" => $query->id,
                         "name" => $query->name,
-                        "teacher_name" => $query->user
-                            ? $query->user->name
-                            : "",
+                        "teacher" => $query->user
+                            ? [
+                                "id" => $query->user->id,
+                                "name" => $query->user->name,
+                            ]
+                            : null,
                     ];
                 }),
                 "subjectIds" => $student_ids,
@@ -96,6 +99,51 @@ class SubjectController extends Controller
                 "message" => "科目を登録しました。",
             ],
             201
+        );
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            "subjects.*.id" => "required|integer",
+            "subjects.*.name" => "required|string|max:255",
+            "subjects.*.teacherId" => "integer|nullable",
+        ]);
+
+        $company_id = $user->company_id;
+
+        $subjects = array_map(function ($subject) use ($company_id) {
+            return [
+                "id" => $subject["id"],
+                "name" => $subject["name"],
+                "user_id" => $subject["teacherId"],
+                "company_id" => $company_id,
+            ];
+        }, $request->subjects);
+
+        try {
+            DB::transaction(function () use ($subjects) {
+                Subject::upsert($subjects, ["id"], ["name", "user_id"]);
+            });
+        } catch (Exception $e) {
+            Log::error($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "保存に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "変更を保存しました。",
+            ],
+            200
         );
     }
 

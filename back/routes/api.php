@@ -15,22 +15,36 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 
     Route::prefix("student")->group(function () {
-        Route::apiResource("/", StudentController::class);
-        Route::post("/add", [StudentController::class, "add"]);
+        Route::get("/", [StudentController::class, "index"]);
+        Route::post("/add", [StudentController::class, "add"]); //Todo
+        // Route::put("/", [StudentController::class, "update"]);
+        // Route::delete("/", [StudentController::class, "destroy"]);
     });
 
     Route::prefix("subject")->group(function () {
-        Route::apiResource("/", SubjectController::class);
+        Route::get("/", [SubjectController::class, "index"]);
+        Route::post("/", [SubjectController::class, "store"]);
+        Route::put("/", [SubjectController::class, "update"]);
+        // Route::delete("/", [SubjectController::class, "destroy"]);
+
         Route::get("/select", [SubjectController::class, "select"]);
     });
 
     Route::prefix("course")->group(function () {
-        Route::apiResource("/", CourseController::class);
+        Route::get("/", [CourseController::class, "index"]);
+        Route::post("/", [CourseController::class, "store"]);
+        // Route::put("/", [CourseController::class, "update"]);
+        // Route::delete("/", [CourseController::class, "destroy"]);
+
         Route::get("/select", [CourseController::class, "select"]);
     });
 
     Route::prefix("teacher")->group(function () {
-        Route::apiResource("/", TeacherController::class);
+        Route::get("/", [TeacherController::class, "index"]);
+        Route::post("/", [TeacherController::class, "store"]);
+        // Route::put("/", [TeacherController::class, "update"]);
+        // Route::delete("/", [TeacherController::class, "destroy"]);
+
         Route::get("/select", [TeacherController::class, "select"]);
     });
 
