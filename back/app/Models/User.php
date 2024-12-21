@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -42,5 +42,10 @@ class User extends Authenticatable
     public function student(): HasOne
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function scopeBulkUpdate($query, $records, $columns)
+    {
+        return DB::bulkUpdate($query, "users", $records, $columns);
     }
 }

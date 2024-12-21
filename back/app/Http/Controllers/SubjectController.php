@@ -119,13 +119,12 @@ class SubjectController extends Controller
                 "id" => $subject["id"],
                 "name" => $subject["name"],
                 "user_id" => $subject["teacherId"],
-                "company_id" => $company_id,
             ];
         }, $request->subjects);
 
         try {
             DB::transaction(function () use ($subjects) {
-                Subject::upsert($subjects, ["id"], ["name", "user_id"]);
+                Subject::bulkUpdate($subjects, ["name", "user_id"]);
             });
         } catch (Exception $e) {
             Log::error($e);

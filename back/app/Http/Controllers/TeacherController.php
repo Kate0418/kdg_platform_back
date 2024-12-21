@@ -48,10 +48,13 @@ class TeacherController extends Controller
                         "id" => $query->id,
                         "name" => $query->name,
                         "email" => $query->email,
-                        "subjectNames" => $query->subject
+                        "subjects" => $query->subject
                             ? $query->subject
                                 ->map(function ($subQuery) {
-                                    return $subQuery->name;
+                                    return [
+                                        "id" => $subQuery->id,
+                                        "name" => $subQuery->name,
+                                    ];
                                 })
                                 ->toArray()
                             : [],
@@ -131,6 +134,56 @@ class TeacherController extends Controller
             [
                 "success" => true,
                 "message" => "講師を登録しました。",
+            ],
+            201
+        );
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            "teachers.*.id" => "required|integer",
+            "teachers.*.name" => "required|string|max:255",
+            "teachers.*.email" => "required|email",
+            "teachers.*.subjectIds" => "array",
+        ]);
+
+        $teachers = [];
+        $subjects = [];
+        foreach ($request->teachers as $teacher) {
+            $teachers[] = [
+                "id" => $teacher["id"],
+                "name" => $teacher["name"],
+                "email" => $teacher["email"],
+            ];
+            foreach ($teacher["subjectIds"] as $subject_id) {
+                $subjects[] = [
+                    "id" => $subject_id,
+                    "user_id" => $teacher["id"],
+                ];
+            }
+        }
+
+        try {
+            DB::transaction(function () use ($teachers, $subjects) {
+                User::bulkUpdate($teachers, ["name", "email"]);
+                Subject::bulkUpdate($subjects, ["user_id"]);
+            });
+        } catch(Exception $e) {
+            Log::warning($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "講師の更新に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "講師を更新しました。",
             ],
             201
         );
