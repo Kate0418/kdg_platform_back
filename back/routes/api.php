@@ -25,7 +25,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/", [SubjectController::class, "index"]);
         Route::post("/", [SubjectController::class, "store"]);
         Route::put("/", [SubjectController::class, "update"]);
-        // Route::delete("/", [SubjectController::class, "destroy"]);
+        Route::delete("/", [SubjectController::class, "destroy"]);
 
         Route::get("/select", [SubjectController::class, "select"]);
     });
@@ -34,7 +34,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/", [CourseController::class, "index"]);
         Route::post("/", [CourseController::class, "store"]);
         // Route::put("/", [CourseController::class, "update"]);
-        // Route::delete("/", [CourseController::class, "destroy"]);
+        Route::delete("/", [CourseController::class, "destroy"]);
 
         Route::get("/select", [CourseController::class, "select"]);
     });
@@ -43,7 +43,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/", [TeacherController::class, "index"]);
         Route::post("/", [TeacherController::class, "store"]);
         Route::put("/", [TeacherController::class, "update"]);
-        // Route::delete("/", [TeacherController::class, "destroy"]);
+        Route::delete("/", [TeacherController::class, "destroy"]);
 
         Route::get("/select", [TeacherController::class, "select"]);
     });

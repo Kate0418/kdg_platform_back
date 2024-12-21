@@ -112,9 +112,7 @@ class SubjectController extends Controller
             "subjects.*.teacherId" => "integer|nullable",
         ]);
 
-        $company_id = $user->company_id;
-
-        $subjects = array_map(function ($subject) use ($company_id) {
+        $subjects = array_map(function ($subject) {
             return [
                 "id" => $subject["id"],
                 "name" => $subject["name"],
@@ -141,6 +139,39 @@ class SubjectController extends Controller
             [
                 "success" => true,
                 "message" => "変更を保存しました。",
+            ],
+            200
+        );
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            "subjectIds" => "required|array",
+            "subjectIds.*" => "required|integer",
+        ]);
+
+        $subjectIds = $request->subjectIds;
+
+        try {
+            DB::transaction(function () use ($subjectIds) {
+                Subject::whereIn("id", $subjectIds)->delete();
+            });
+        } catch (Exception $e) {
+            Log::error($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "科目の削除に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "科目を削除しました。",
             ],
             200
         );

@@ -54,6 +54,40 @@ class CourseController extends Controller
             201
         );
     }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            "courseIds" => "required|array",
+            "courseIds.*" => "required|integer",
+        ]);
+
+        $courseIds = $request->courseIds;
+
+        try {
+            DB::transaction(function () use ($courseIds) {
+                Course::whereIn("id", $courseIds)->delete();
+            });
+        } catch (Exception $e) {
+            Log::error($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "コースの削除に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "コースを削除しました。",
+            ],
+            200
+        );
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();

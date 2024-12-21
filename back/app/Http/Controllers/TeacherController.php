@@ -189,6 +189,40 @@ class TeacherController extends Controller
         );
     }
 
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            "teacherIds" => "required|array",
+            "teacherIds.*" => "required|integer",
+        ]);
+
+        $teacher_ids = $request->teacherIds;
+
+        try {
+            DB::transaction(function () use ($teacher_ids) {
+                User::whereIn("id", $teacher_ids)->delete();
+                Subject::whereIn("user_id", $teacher_ids)->update(['user_id' => null]);
+            });
+        } catch(Exception $e) {
+            Log::warning($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "講師の削除に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "講師を削除しました。",
+            ],
+            201
+        );
+    }
+
     public function select()
     {
         $user = Auth::user();
