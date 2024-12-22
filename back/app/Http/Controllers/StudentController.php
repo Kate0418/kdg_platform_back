@@ -58,6 +58,7 @@ class StudentController extends Controller
         }
 
         $page_count = $request->pageCount;
+        $student_ids = $users->pluck("id")->toArray();
         $users = $users->paginate(14, ["*"], "page", $page_count);
         $total = $users->lastPage();
 
@@ -69,20 +70,29 @@ class StudentController extends Controller
                         "id" => $query->id,
                         "name" => $query->name,
                         "email" => $query->email,
-                        "courseName" => $query->student->course
-                            ? $query->student->course->name
+                        "course" => $query->student->course
+                            ? [
+                                "id" => $query->student->course->id,
+                                "name" => $query->student->course->name,
+                            ]
                             : null,
-                        "gradeName" => $query->student->grade->name,
-                        "yearName" => $query->student->year->name,
+                        "grade" => [
+                            "id" => $query->student->grade->id,
+                            "name" => $query->student->grade->name,
+                        ],
+                        "year" => [
+                            "id" => $query->student->year->id,
+                            "name" => $query->student->year->name,
+                        ],
                     ];
                 }),
+                "studentIds" => $student_ids,
                 "total" => $total,
             ],
             201
         );
     }
 
-    // students: [{name: "yuto", email: "yuto@gmail.com", courseId: null, gradeId: 7, yearId: 3}]
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -166,6 +176,91 @@ class StudentController extends Controller
             [
                 "success" => true,
                 "message" => "生徒を追加しました。",
+            ],
+            201
+        );
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            "students.*.name" => "required|string|max:255",
+            "students.*.email" => "required|email",
+            "students.*.courseId" => "nullable|integer",
+            "students.*.gradeId" => "required|integer",
+            "students.*.yearId" => "required|integer",
+        ]);
+
+        $users = [];
+        $students = [];
+        foreach ($request->students as $student) {
+            $users[] = [
+                "id" => $student["id"],
+                "name" => $student["name"],
+                "email" => $student["email"],
+            ];
+
+            $students[] = [
+                "user_id" => $student["id"],
+                "course_id" => $student["courseId"],
+                "grade_id" => $student["gradeId"],
+                "year_id" => $student["yearId"],
+            ];
+        }
+
+        try {
+            DB::transaction(function () use ($users, $students) {
+                User::bulkUpdate($users, ["name", "email"]);
+                Student::bulkUpdate($students, ["course_id", "grade_id", "year_id"]);
+            });
+        } catch(Exception $e) {
+            Log::warning($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "生徒の更新に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "生徒を更新しました。",
+            ],
+            201
+        );
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            "studentIds" => "required|array",
+            "studentIds.*" => "required|integer",
+        ]);
+
+        $student_ids = $request->studentIds;
+
+        try {
+            DB::transaction(function () use ($student_ids) {
+                User::whereIn("id", $student_ids)->delete();
+            });
+        } catch (Exception $e) {
+            Log::warning($e);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "生徒の削除に失敗しました。",
+                ],
+                500
+            );
+        }
+
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "生徒を削除しました。",
             ],
             201
         );

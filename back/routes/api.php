@@ -16,9 +16,9 @@ Route::middleware("auth:sanctum")->group(function () {
 
     Route::prefix("student")->group(function () {
         Route::get("/", [StudentController::class, "index"]);
-        Route::post("/", [StudentController::class, "store"]); //Todo
-        // Route::put("/", [StudentController::class, "update"]);
-        // Route::delete("/", [StudentController::class, "destroy"]);
+        Route::post("/", [StudentController::class, "store"]);
+        Route::put("/", [StudentController::class, "update"]);
+        Route::delete("/", [StudentController::class, "destroy"]);
     });
 
     Route::prefix("subject")->group(function () {

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Student extends Model
 {
@@ -30,5 +31,10 @@ class Student extends Model
     public function year(): BelongsTo
     {
         return $this->belongsTo(Year::class);
+    }
+
+    public function scopeBulkUpdate($query, $records, $columns)
+    {
+        return DB::bulkUpdate($query, "students", $records, $columns, "user_id");
     }
 }
