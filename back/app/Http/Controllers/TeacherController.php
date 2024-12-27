@@ -167,7 +167,9 @@ class TeacherController extends Controller
         try {
             DB::transaction(function () use ($teachers, $subjects) {
                 User::bulkUpdate($teachers, ["name", "email"]);
-                Subject::bulkUpdate($subjects, ["user_id"]);
+                Subject::whereIn('user_id', collect($teachers)->pluck('id'))
+                ->update(['user_id' => null]);
+                Subject::bulkUpdate($subjects, ['user_id']);
             });
         } catch(Exception $e) {
             Log::warning($e);
