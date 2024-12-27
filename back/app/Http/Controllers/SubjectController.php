@@ -104,8 +104,6 @@ class SubjectController extends Controller
 
     public function update(Request $request)
     {
-        $user = Auth::user();
-
         $request->validate([
             "subjects.*.id" => "required|integer",
             "subjects.*.name" => "required|string|max:255",
