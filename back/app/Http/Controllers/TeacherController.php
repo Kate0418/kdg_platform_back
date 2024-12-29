@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendMailJob;
+use App\Mail\LoginMail;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class TeacherController extends Controller
         $user = Auth::user();
 
         $teachers = User::where("company_id", $user->company_id)
-            ->where("type", 2)
+            ->where("type", "teacher")
             ->with("subject");
 
         $key_word = $request->keyWord;
@@ -93,19 +95,19 @@ class TeacherController extends Controller
 
         try {
             DB::transaction(function () use ($teachers, $company_id) {
-                foreach ($teachers as $teachers) {
+                foreach ($teachers as $teacher) {
                     $first_password = Str::random(12);
-                    $user = User::create([
-                        "name" => $teachers["name"],
+                    $new_user = User::create([
+                        "name" => $teacher["name"],
                         "password" => bcrypt($first_password),
-                        "type" => 2,
+                        "type" => "teacher",
                         "company_id" => $company_id,
-                        "email" => $teachers["email"],
+                        "email" => $teacher["email"],
                         "first_password" => $first_password,
                     ]);
 
-                    $user_id = $user->id;
-                    $subject_ids = collect($teachers["subjectIds"])
+                    $user_id = $new_user->id;
+                    $subject_ids = collect($teacher["subjectIds"])
                         ->map(function ($subject_id) {
                             return $subject_id;
                         })
@@ -117,6 +119,8 @@ class TeacherController extends Controller
                         $subject->user_id = $user_id;
                         $subject->save();
                     }
+
+                    SendMailJob::dispatch($new_user, LoginMail::class);
                 }
             });
         } catch (Exception $e) {
@@ -230,7 +234,7 @@ class TeacherController extends Controller
         $user = Auth::user();
 
         $teachers = User::where("company_id", $user->company_id)
-            ->where("type", 2)
+            ->where("type", "teacher")
             ->get()
             ->map(function ($query) {
                 return [

@@ -13,13 +13,37 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            "name" => "中尾 渓斗",
-            "password" => Hash::make("Tanimiti4221"),
-            "type" => 1,
+        $admin = User::create([
+            "name" => "中尾スタッフ",
+            "password" => Hash::make("Kate0418"),
+            "type" => "admin",
             "company_id" => 1,
-            "email" => "nakao.keito0418@gmail.com",
+            "email" => "admin.nakao@example.com",
             "first_password" => "Kate0418",
+        ]);
+
+        $teacher = User::create([
+            "name" => "中尾先生",
+            "password" => Hash::make("Kate0418"),
+            "type" => "teacher",
+            "company_id" => 1,
+            "email" => "teacher.nakao@example.com",
+            "first_password" => "Kate0418",
+        ]);
+
+        $student =  User::create([
+            "name" => "中尾生徒",
+            "password" => Hash::make("Kate0418"),
+            "type" => "student",
+            "company_id" => 1,
+            "email" => "student.nakao@example.com",
+            "first_password" => "Kate0418",
+        ]);
+
+        $student->student()->create([
+            "course_id" => null,
+            "grade_id" => 1,
+            "year_id" => 1,
         ]);
     }
 }

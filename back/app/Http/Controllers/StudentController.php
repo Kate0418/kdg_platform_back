@@ -25,7 +25,7 @@ class StudentController extends Controller
         ]);
 
         $users = User::where("company_id", $user->company_id)
-            ->where("type", 3)
+            ->where("type", "student")
             ->with([
                 "student",
                 "student.course",
@@ -139,7 +139,7 @@ class StudentController extends Controller
                     $new_user = User::create([
                         "name" => $student["name"],
                         "password" => bcrypt($first_password),
-                        "type" => 3,
+                        "type" => "student",
                         "company_id" => $company_id,
                         "email" => $student["email"],
                         "first_password" => $first_password,
@@ -152,13 +152,7 @@ class StudentController extends Controller
                         "year_id" => $student["yearId"],
                     ]);
 
-                    foreach ($students as $student) {
-                        $new_user = User::where(
-                            "email",
-                            $student["email"]
-                        )->first();
-                        SendMailJob::dispatch($new_user, LoginMail::class);
-                    }
+                    SendMailJob::dispatch($new_user, LoginMail::class);
                 }
             });
         } catch (Exception $e) {
