@@ -1,8 +1,8 @@
 services:
-  back:
+  app:
     build: ./
     ports:
-      - "8080:8000"
+      - "8081:8000"
     volumes:
       - .:/back
     restart: always
