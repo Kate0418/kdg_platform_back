@@ -2,7 +2,7 @@ services:
   back:
     build: ./
     ports:
-      - "8005:8000"
+      - "8080:8000"
     volumes:
       - ./back:/back
     restart: always
