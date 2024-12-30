@@ -1,7 +1,7 @@
 FROM php:8.3-fpm
 
 WORKDIR /back
-COPY ./back /back
+COPY . .
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
