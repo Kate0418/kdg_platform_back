@@ -1,8 +1,6 @@
 services:
   app:
     build: ./
-    ports:
-      - "8081:8000"
     volumes:
       - .:/back
     restart: always
@@ -13,3 +11,12 @@ services:
       - .:/back
     restart: always
     command: php artisan queue:work
+  web:
+    image: nginx
+    ports:
+      - "8081:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.crt:/etc/nginx/ssl/nginx.crt:ro
+      - ./nginx.key:/etc/nginx/ssl/nginx.key:ro
+    restart: always
