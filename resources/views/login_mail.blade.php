@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>初回ログイン</title>
+    <title>ログインリマインダー</title>
     <style>
         body {
             line-height: 1;
@@ -20,7 +20,7 @@
             line-height: 1.2;
         }
         .accent {
-            color: rgb(180, 188, 78);
+            color: #344699;
         }
         .left {
             padding-left: 10px
@@ -34,7 +34,7 @@
         <li>URLからログインする</li>
         <div class="element">
             <p>ログインページ</p>
-            <a class="left" href="http://localhost:3000/site/login">http://localhost:3000/site/login</a>
+            <a class="left" href="https://kdg-platform-test.vercel.app/site/login/">https://kdg-platform-test.vercel.app/site/login/</a>
         </div>
         <div class="element">
             <p>メールアドレス</p>
