@@ -1,66 +1,250 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# KDGプラットフォーム
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 公開URL
+- 9:00~21:00の公開
 
-## About Laravel
+  https://kdg-platform-test.vercel.app/site/login/
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- テスト環境ユーザー
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+  <table>
+    <tr>
+      <td>メールアドレス</td>
+      <td>admin.nakao@example.com</td>
+    </tr>
+    <tr>
+      <td>パスワード</td>
+      <td>Kate0418</td>
+    </tr>
+  </table>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## アプリケーション概要
+- 自分の通っている`KADOKAWAドワンゴ情報工科学院`のプラットフォームとなるアプリケーションです。
+- `管理`, `講師`, `生徒`の三つのユーザータイプが存在します。
+- 出席や公欠申請, スケジュールの確認, 本の貸出管理などの機能を開発中です。
 
-## Learning Laravel
+## 創意工夫
+- `使いやすい（UX）`これだけを重視して制作しています。そのため`画面遷移`と`1ページの情報`は最小限にしています。
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**`UXの優れたアプリケーション`は`UI`が優れているが、`UIが優れたアプリケーション`は`UX`が優れているとは限らない。**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 技術スタック
+- フロントエンド
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  <table>
+    <tr>
+      <td>フレームワーク</td>
+      <td>Next.js</td>
+    </tr>
+    <tr>
+      <td>デプロイ</td>
+      <td>Vercel</td>
+    </tr>
+    <tr>
+      <td>CSSフレームワーク</td>
+      <td>Tailwind CSS</td>
+    </tr>
+    <tr>
+      <td>開発環境</td>
+      <td>Docker, Git</td>
+    </tr>
+  </table>
 
-## Laravel Sponsors
+- バックエンド
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+  <table>
+    <tr>
+      <td>フレームワーク</td>
+      <td>Laravel</td>
+    </tr>
+    <tr>
+      <td>データベース</td>
+      <td>RDS Mysql</td>
+    </tr>
+    <tr>
+      <td>デプロイ</td>
+      <td>AWS EC2</td>
+    </tr>
+    <tr>
+      <td>キュー</td>
+      <td>AWS SQS</td>
+    </tr>
+    <tr>
+      <td>メール送信</td>
+      <td>AWS SES</td>
+    </tr>
+    <tr>
+      <td>webサーバー</td>
+      <td>Nginx</td>
+    </tr>
+    <tr>
+      <td>開発環境</td>
+      <td>Docker, Git</td>
+    </tr>
+  </table>
 
-### Premium Partners
+## 実際のアプリケーション画像
+### 【 共通 】
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+<table>
+  <tr>
+    <td colspan="2">ログインページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 35 24" src="https://github.com/user-attachments/assets/d1011536-6ba1-42ea-9bb5-d48072d6ab38" />
+    </td>
+    <td width="40%">
+        <ul">
+          <li>メールアドレスとパスワードを用いてログインができます。</li>
+          <li>テスト環境ユーザー</li>
+        </ul>
+        <table>
+          <tr>
+            <td>メールアドレス</td>
+            <td>admin.nakao@example.com</td>
+          </tr>
+          <tr>
+            <td>パスワード</td>
+            <td>Kate0418</td>
+          </tr>
+        </table>
+    </td>
+  </tr>
+</table>
 
-## Contributing
+<br />
+<br />
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 【 管理 】
+<table>
+  <tr>
+    <td colspan="2">生徒一覧ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 35 59" src="https://github.com/user-attachments/assets/9987e6e1-4611-4584-a6cc-f4904dfb2998" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>生徒情報の一覧を確認できます。</li>
+        <li>画面遷移なしで検索, 個別編集, 一括削除, 詳細の閲覧ができます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">生徒登録ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 36 38" src="https://github.com/user-attachments/assets/20d13fe3-f28b-4b63-8db9-97843cec86bb" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>生徒情報の登録ができます。</li>
+        <li>一度に複数の生徒ユーザーを登録することが可能です。</li>
+        <li>登録したユーザーのメールアドレス宛に、ランダムなパスワードとログインのURLが送信されます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">講師一覧ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 37 46" src="https://github.com/user-attachments/assets/57d79595-37ee-45a8-b31b-08217a5661be" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>講師情報の一覧を確認できます。</li>
+        <li>画面遷移なしで検索, 個別編集, 一括削除, 詳細の閲覧ができます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">講師登録ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 38 37" src="https://github.com/user-attachments/assets/75a53844-628d-4eb3-a22f-88961b3112f8" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>講師情報の登録ができます。</li>
+        <li>一度に複数の講師ユーザーを登録することが可能です。</li>
+        <li>登録したユーザーのメールアドレス宛に、ランダムなパスワードとログインのURLが送信されます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">科目一覧ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 39 04" src="https://github.com/user-attachments/assets/ee92b471-a5b6-4e25-8981-6138dbc0adcd" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>科目情報の一覧を確認できます。</li>
+        <li>画面遷移なしで検索, 個別編集, 一括削除ができます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">科目登録ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 39 24" src="https://github.com/user-attachments/assets/20d58c7c-980c-466d-bced-978d5fb15ac6" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>科目情報の登録ができます。</li>
+        <li>一度に複数の科目を登録することが可能です。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">コース一覧ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 43 32" src="https://github.com/user-attachments/assets/e3168ed0-55ed-4399-9572-bcf6fa12c7a8" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>コース情報の一覧を確認できます。</li>
+        <li>画面遷移なしで検索, 一括削除ができます。</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">コース登録ページ</td>
+  </tr>
+  <tr>
+    <td width="60%">
+      <img alt="スクリーンショット 2025-01-05 1 42 38" src="https://github.com/user-attachments/assets/93fe7304-07c5-4bcc-9169-a9aa2aa58ee1" />
+    </td>
+    <td width="40%">
+      <ul>
+        <li>コース情報の登録ができます。</li>
+        <li>ドラック&ドロップが可能なので楽々と授業コマの変更ができます。</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-## Code of Conduct
+<br />
+<br />
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 【 講師 】
+- 開発中
 
-## Security Vulnerabilities
+<br />
+<br />
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 【 生徒 】
+- 開発中
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## フロントエンドリポジトリ
+- https://github.com/Kate0418/kdg-platform-front
