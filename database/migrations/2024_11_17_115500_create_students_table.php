@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("course_id")->nullable();
-            $table->tinyInteger("grade_id");
-            $table->tinyInteger("year_id");
+            $table->unsignedBigInteger("master_grade_id");
+            $table->unsignedBigInteger("master_year_id");
             $table->timestamps();
             $table->softDeletes();
         });

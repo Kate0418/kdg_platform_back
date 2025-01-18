@@ -11,30 +11,25 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "company_id", "grade_id"];
-
-    public function user(): HasMany
-    {
-        return $this->hasMany(User::class);
-    }
-
-    public function lesson(): HasMany
-    {
-        return $this->hasMany(Lesson::class);
-    }
+    protected $fillable = ["company_id", "master_grade_id", "name"];
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function grade(): BelongsTo
+    public function masterGrade(): BelongsTo
     {
-        return $this->belongsTo(Grade::class);
+        return $this->belongsTo(MasterGrade::class);
     }
 
-    public function time(): HasMany
+    public function students(): HasMany
     {
-        return $this->hasMany(Time::class);
+        return $this->hasMany(Student::class);
+    }
+
+    public function periods(): HasMany
+    {
+        return $this->hasMany(Period::class);
     }
 }

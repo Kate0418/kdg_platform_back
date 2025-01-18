@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\Period;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Carbon\Carbon;
@@ -99,7 +99,7 @@ class CourseController extends Controller
             "course.times.*.startTime" => "required|string|max:255",
             "course.times.*.endTime" => "required|string|max:255",
 
-            "course.lessons.*.dayOfWeek" => "required|integer",
+            "course.lessons.*.dayOfWeek" => "required|in:Mon,Tue,Wed,Thu,Fri,Sat,Sun",
             "course.lessons.*.period" => "required|integer",
             "course.lessons.*.subjectId" => "required|integer",
         ]);
@@ -126,7 +126,7 @@ class CourseController extends Controller
                 }
 
                 foreach ($course["times"] as $time) {
-                    Time::create([
+                    Period::create([
                         "course_id" => $course_id,
                         "period" => $time["period"],
                         "start_time" => Carbon::parse(

@@ -5,8 +5,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
-use App\Models\Grade;
-use App\Models\Year;
+use App\Http\Controllers\TopController;
+use App\Models\MasterGrade;
+use App\Models\MasterYear;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware("auth:sanctum")->group(function () {
@@ -49,7 +50,7 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 
     Route::get("/grade/select", function () {
-        $grades = Grade::get()->map(function ($query) {
+        $grades = MasterGrade::get()->map(function ($query) {
             return [
                 "value" => $query->id,
                 "label" => $query->name,
@@ -62,7 +63,7 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 
     Route::get("/year/select", function () {
-        $years = Year::get()->map(function ($query) {
+        $years = MasterYear::get()->map(function ($query) {
             return [
                 "value" => $query->id,
                 "label" => $query->name,
@@ -73,6 +74,8 @@ Route::middleware("auth:sanctum")->group(function () {
             "years" => $years,
         ]);
     });
+
+    Route::get("/top/attend", [TopController::class, "attend"]);
 });
 
 Route::post("/login", [LoginController::class, "index"]);

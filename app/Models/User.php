@@ -14,25 +14,15 @@ class User extends Authenticatable
     use HasApiTokens;
 
     protected $fillable = [
-        "name",
-        "password",
-        "type",
         "company_id",
-        "email",
+        'name',
+        'email',
+        'password',
         "first_password",
+        "type",
     ];
 
     protected $hidden = ["password", "first_password"];
-
-    public function attend(): HasMany
-    {
-        return $this->hasMany(Attend::class);
-    }
-
-    public function subject(): HasMany
-    {
-        return $this->hasMany(Subject::class);
-    }
 
     public function company(): BelongsTo
     {
@@ -42,6 +32,11 @@ class User extends Authenticatable
     public function student(): HasOne
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function subjects(): HasMany
+    {
+        return $this->hasMany(Subject::class);
     }
 
     public function scopeBulkUpdate($query, $records, $columns)

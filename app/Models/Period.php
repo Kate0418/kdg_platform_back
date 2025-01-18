@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Time extends Model
+class Period extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["course_id", "period", "start_time", "end_time"];
+    protected $fillable = ["course_id", "sequence", "start_time", "end_time"];
 
     public function course(): BelongsTo
     {

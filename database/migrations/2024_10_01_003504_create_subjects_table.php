@@ -10,9 +10,9 @@ class CreateSubjectsTable extends Migration
     {
         Schema::create("subjects", function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("company_id");
             $table->unsignedBigInteger("user_id")->nullable();
             $table->string("name");
-            $table->unsignedBigInteger("company_id");
             $table->timestamps();
             $table->softDeletes();
         });

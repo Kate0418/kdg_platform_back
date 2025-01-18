@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create("courses", function (Blueprint $table) {
             $table->id();
-            $table->string("name");
             $table->unsignedBigInteger("company_id");
-            $table->tinyInteger("grade_id");
+            $table->tinyInteger("master_grade_id");
+            $table->string("name");
             $table->timestamps();
             $table->softDeletes();
         });

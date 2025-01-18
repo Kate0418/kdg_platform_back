@@ -11,20 +11,20 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create("years", function (Blueprint $table) {
+        Schema::create("master_years", function (Blueprint $table) {
             $table->id();
-
             $table->string("name")->unique();
+            $table->tinyInteger('status')->unsigned();
             $table->timestamps();
             $table->softDeletes();
         });
 
-        DB::table("years")->insert([
-            ["name" => "1年制"],
-            ["name" => "2年制"],
-            ["name" => "3年制"],
-            ["name" => "4年制"],
-            ["name" => "5年制"],
+        DB::table("master_years")->insert([
+            ["name" => "1年制", "status" => 1],
+            ["name" => "2年制", "status" => 2],
+            ["name" => "3年制", "status" => 3],
+            ["name" => "4年制", "status" => 4],
+            ["name" => "5年制", "status" => 5],
         ]);
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists("years");
+        Schema::dropIfExists("master_years");
     }
 };
