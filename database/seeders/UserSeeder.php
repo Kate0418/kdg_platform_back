@@ -42,8 +42,8 @@ class UserSeeder extends Seeder
 
         $student->student()->create([
             "course_id" => null,
-            "grade_id" => 1,
-            "year_id" => 1,
+            "master_grade_id" => 1,
+            "master_year_id" => 1,
         ]);
     }
 }

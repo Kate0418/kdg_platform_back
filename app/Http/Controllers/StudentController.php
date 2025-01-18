@@ -29,8 +29,8 @@ class StudentController extends Controller
             ->with([
                 "student",
                 "student.course",
-                "student.grade",
-                "student.year",
+                "student.masterGrade",
+                "student.masterYear",
             ]);
 
         $key_word = $request->keyWord;
@@ -44,12 +44,12 @@ class StudentController extends Controller
                     ) {
                         $subQuery->where("name", "like", "%{$key_word}%");
                     })
-                    ->orWhereHas("student.grade", function ($subQuery) use (
+                    ->orWhereHas("student.masterGrade", function ($subQuery) use (
                         $key_word
                     ) {
                         $subQuery->where("name", "like", "%{$key_word}%");
                     })
-                    ->orWhereHas("student.year", function ($subQuery) use (
+                    ->orWhereHas("student.masterYear", function ($subQuery) use (
                         $key_word
                     ) {
                         $subQuery->where("name", "like", "%{$key_word}%");
@@ -77,12 +77,12 @@ class StudentController extends Controller
                             ]
                             : null,
                         "grade" => [
-                            "id" => $query->student->grade->id,
-                            "name" => $query->student->grade->name,
+                            "id" => $query->student->masterGrade->id,
+                            "name" => $query->student->masterGrade->name,
                         ],
                         "year" => [
-                            "id" => $query->student->year->id,
-                            "name" => $query->student->year->name,
+                            "id" => $query->student->masterYear->id,
+                            "name" => $query->student->masterYear->name,
                         ],
                     ];
                 }),
@@ -148,8 +148,8 @@ class StudentController extends Controller
                     Student::create([
                         "user_id" => $new_user->id,
                         "course_id" => $student["courseId"],
-                        "grade_id" => $student["gradeId"],
-                        "year_id" => $student["yearId"],
+                        "master_grade_id" => $student["gradeId"],
+                        "master_year_id" => $student["yearId"],
                     ]);
 
                     SendMailJob::dispatch($new_user, LoginMail::class);
@@ -197,15 +197,15 @@ class StudentController extends Controller
             $students[] = [
                 "user_id" => $student["id"],
                 "course_id" => $student["courseId"],
-                "grade_id" => $student["gradeId"],
-                "year_id" => $student["yearId"],
+                "master_grade_id" => $student["gradeId"],
+                "master_year_id" => $student["yearId"],
             ];
         }
 
         try {
             DB::transaction(function () use ($users, $students) {
                 User::bulkUpdate($users, ["name", "email"]);
-                Student::bulkUpdate($students, ["course_id", "grade_id", "year_id"]);
+                Student::bulkUpdate($students, ["course_id", "master_grade_id", "master_year_id"]);
             });
         } catch(Exception $e) {
             Log::warning($e);

@@ -21,7 +21,7 @@ class TeacherController extends Controller
 
         $teachers = User::where("company_id", $user->company_id)
             ->where("type", "teacher")
-            ->with("subject");
+            ->with("subjects");
 
         $key_word = $request->keyWord;
         if ($key_word) {
@@ -29,7 +29,7 @@ class TeacherController extends Controller
                 $query
                     ->where("name", "like", "%{$key_word}%")
                     ->orWhere("email", "like", "%{$key_word}%")
-                    ->orWhereHas("subject", function ($subQuery) use (
+                    ->orWhereHas("subjects", function ($subQuery) use (
                         $key_word
                     ) {
                         $subQuery->where("name", "like", "%{$key_word}%");
@@ -50,8 +50,8 @@ class TeacherController extends Controller
                         "id" => $query->id,
                         "name" => $query->name,
                         "email" => $query->email,
-                        "subjects" => $query->subject
-                            ? $query->subject
+                        "subjects" => $query->subjects
+                            ? $query->subjects
                                 ->map(function ($subQuery) {
                                     return [
                                         "id" => $subQuery->id,
