@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Course;
-use App\Models\Lesson;
 use App\Models\Period;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -19,7 +18,7 @@ class CourseController extends Controller
         $user = Auth::user();
 
         $courses = Course::where("company_id", $user->company_id)->with(
-            "grade"
+            "masterGrade"
         );
 
         $key_word = $request->keyWord;
@@ -27,7 +26,7 @@ class CourseController extends Controller
             $courses->where(function ($query) use ($key_word) {
                 $query
                     ->where("name", "like", "%{$key_word}%")
-                    ->orWhereHas("grade", function ($subQuery) use ($key_word) {
+                    ->orWhereHas("masterGrade", function ($subQuery) use ($key_word) {
                         $subQuery->where("name", "like", "%{$key_word}%");
                     });
             });
@@ -45,7 +44,7 @@ class CourseController extends Controller
                     return [
                         "id" => $query->id,
                         "name" => $query->name,
-                        "gradeName" => $query->grade->name,
+                        "gradeName" => $query->masterGrade->name,
                     ];
                 }),
                 "courseIds" => $course_ids,
@@ -92,16 +91,16 @@ class CourseController extends Controller
     {
         $user = Auth::user();
         $request->validate([
-            "course.name" => "required|string|max:255",
-            "course.gradeId" => "required|integer",
-
-            "course.times.*.period" => "required|integer",
-            "course.times.*.startTime" => "required|string|max:255",
-            "course.times.*.endTime" => "required|string|max:255",
-
-            "course.lessons.*.dayOfWeek" => "required|in:Mon,Tue,Wed,Thu,Fri,Sat,Sun",
-            "course.lessons.*.period" => "required|integer",
-            "course.lessons.*.subjectId" => "required|integer",
+            'course' => 'required|array',
+            'course.name' => 'required|string',
+            'course.gradeId' => 'nullable|integer',
+            'course.periods' => 'required|array',
+            'course.periods.*.sequence' => 'required|integer|min:1',
+            'course.periods.*.startTime' => 'nullable|date',
+            'course.periods.*.endTime' => 'nullable|date|after:course.periods.*.startTime',
+            'course.periods.*.lessons' => 'required|array',
+            'course.periods.*.lessons.*.subjectId' => 'nullable|integer',
+            'course.periods.*.lessons.*.dayOfWeek' => 'required|in:Mon,Tue,Wed,Thu,Fri,Sat,Sun',
         ]);
 
         $company_id = $user->company_id;
@@ -109,33 +108,40 @@ class CourseController extends Controller
 
         try {
             DB::transaction(function () use ($course, $company_id) {
-                $course_id = Course::create([
+                $created_course = Course::create([
                     "name" => $course["name"],
-                    "grade_id" => $course["gradeId"],
+                    "master_grade_id" => $course["gradeId"],
                     "company_id" => $company_id,
-                ])->id;
+                ]);
 
-                foreach ($course["lessons"] as $lesson) {
-                    Lesson::create([
-                        "course_id" => $course_id,
-                        "subject_id" => $lesson["subjectId"],
-                        "day_of_week" => $lesson["dayOfWeek"],
-                        "period" => $lesson["period"],
-                        "company_id" => $company_id,
-                    ]);
-                }
+                $periods = collect($course["periods"])
+                    ->map((function ($period) {
+                        return [
+                            "sequence" => $period["sequence"],
+                            "start_time" => $period["startTime"],
+                            "end_time" => $period["endTime"],
+                            "lessons" => $period["lessons"],
+                        ];
+                    }))
+                    ->toArray();
 
-                foreach ($course["times"] as $time) {
-                    Period::create([
-                        "course_id" => $course_id,
-                        "period" => $time["period"],
-                        "start_time" => Carbon::parse(
-                            $time["startTime"]
-                        )->format("H:i:s"),
-                        "end_time" => Carbon::parse($time["endTime"])->format(
-                            "H:i:s"
-                        ),
+                foreach ($periods as $period) {
+                    $created_period = Period::create([
+                        "course_id" => $created_course->id,
+                        "sequence" => $period["sequence"],
+                        "start_time" => Carbon::parse($period["start_time"])->format("H:i:s"),
+                        "end_time" => Carbon::parse($period["end_time"])->format("H:i:s"),
                     ]);
+
+                    $created_period->lessons()->createMany(
+                        collect($period["lessons"])->map(function ($lesson) use ($company_id) {
+                            return [
+                                "company_id" => $company_id,
+                                "subject_id" => $lesson["subjectId"],
+                                "day_of_week" => $lesson["dayOfWeek"],
+                            ];
+                        })->toArray()
+                    );
                 }
             });
         } catch (Exception $e) {
