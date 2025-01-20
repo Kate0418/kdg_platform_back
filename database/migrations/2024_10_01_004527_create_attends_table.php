@@ -11,9 +11,10 @@ class CreateAttendsTable extends Migration
         Schema::create("attends", function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("company_id");
-            $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("student_id");
             $table->unsignedBigInteger("lesson_id");
-            $table->integer("status");
+            $table->date("date");
+            $table->enum("status", ["present", "late", "absent"]);
             $table->timestamps();
             $table->softDeletes();
         });

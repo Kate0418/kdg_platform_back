@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendStudentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
@@ -75,7 +76,9 @@ Route::middleware("auth:sanctum")->group(function () {
         ]);
     });
 
-    Route::get("/top/attend", [TopController::class, "attend"]);
+    Route::get("/top/attend-student", [TopController::class, "attendStudent"]);
+
+    Route::post("/attend-student", [AttendStudentController::class, "store"]);
 });
 
 Route::post("/login", [LoginController::class, "index"]);

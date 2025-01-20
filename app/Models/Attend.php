@@ -9,5 +9,5 @@ class Attend extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["user_id", "lesson_id", "status", "company_id"];
+    protected $fillable = ["company_id", "student_id", "lesson_id", "date", "status"];
 }

@@ -129,8 +129,12 @@ class CourseController extends Controller
                     $created_period = Period::create([
                         "course_id" => $created_course->id,
                         "sequence" => $period["sequence"],
-                        "start_time" => Carbon::parse($period["start_time"])->format("H:i:s"),
-                        "end_time" => Carbon::parse($period["end_time"])->format("H:i:s"),
+                        "start_time" => Carbon::parse($period["start_time"])
+                            ->timezone('Asia/Tokyo')
+                            ->format("H:i:s"),
+                        "end_time" => Carbon::parse($period["end_time"])
+                            ->timezone('Asia/Tokyo')
+                            ->format("H:i:s"),
                     ]);
 
                     $created_period->lessons()->createMany(
